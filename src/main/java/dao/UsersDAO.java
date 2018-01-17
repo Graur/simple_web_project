@@ -2,36 +2,38 @@ package dao;
 
 import model.User;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UsersDAO {
-    private String jdbcURL;
-    private String jdbcUsername;
-    private String jdbcPassword;
+//    private String jdbcURL;
+//    private String jdbcUsername;
+//    private String jdbcPassword;
     private Connection jdbcConnection;
 
-    public UsersDAO(String jdbcURL, String jdbcUsername, String jdbcPassword) {
-        this.jdbcURL = jdbcURL;
-        this.jdbcUsername = jdbcUsername;
-        this.jdbcPassword = jdbcPassword;
+    public UsersDAO() {
     }
+
+    //    public UsersDAO(String jdbcURL, String jdbcUsername, String jdbcPassword) {
+//        this.jdbcURL = jdbcURL;
+//        this.jdbcUsername = jdbcUsername;
+//        this.jdbcPassword = jdbcPassword;
+//    }
 
     protected void connect() throws SQLException {
         if(jdbcConnection == null || jdbcConnection.isClosed()) {
-            try {
-                Class.forName("com.mysql.jdbc.Driver");
-            } catch (ClassNotFoundException e){
-                throw new SQLException(e);
-            }
-            jdbcConnection = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
+
+            jdbcConnection = SQL_Connection.getDBConnection();
         }
     }
 
     private void disconnect() throws SQLException {
         if(jdbcConnection != null || !jdbcConnection.isClosed()){
-            jdbcConnection.close();
+            SQL_Connection.closeDBConnection();
         }
     }
 

@@ -18,11 +18,11 @@ public class ControllerServlet extends HttpServlet {
     private UsersDAO usersDAO;
 
     public void init() {
-        String jdbcURL = "jdbc:mysql://localhost:3306/users";
-        String jdbcUsername = "root";
-        String jdbcPassword = "root";
+//        String jdbcURL = "jdbc:mysql://localhost:3306/users";
+//        String jdbcUsername = "root";
+//        String jdbcPassword = "root";
 
-        usersDAO = new UsersDAO(jdbcURL, jdbcUsername, jdbcPassword);
+        usersDAO = new UsersDAO();
     }
 
     @Override
