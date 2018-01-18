@@ -105,7 +105,7 @@ public class UsersDAO {
         return user;
     }
 
-    public List<User> listAllUsers() throws SQLException{
+    public List<User> getAllUsers() throws SQLException{
         List<User> list = new ArrayList<>();
         String sql = "SELECT * FROM user";
 

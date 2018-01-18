@@ -7,6 +7,8 @@ import java.sql.SQLException;
 public class SQL_Connection {
     private static Connection connection;
 
+
+
     public static Connection getDBConnection() throws SQLException {
         String jdbcURL = "jdbc:mysql://localhost:3306/users";
         String jdbcUsername = "root";
