@@ -15,15 +15,15 @@ import java.util.List;
 
 @WebServlet("/")
 public class ControllerServlet extends HttpServlet {
-    private UsersDAO usersDAO;
+    private UsersDAO usersDAO = new UsersDAO();
 
-    public void init() {
-//        String jdbcURL = "jdbc:mysql://localhost:3306/users";
-//        String jdbcUsername = "root";
-//        String jdbcPassword = "root";
-
-        usersDAO = new UsersDAO();
-    }
+//    public void init() {
+////        String jdbcURL = "jdbc:mysql://localhost:3306/users";
+////        String jdbcUsername = "root";
+////        String jdbcPassword = "root";
+//
+//        usersDAO = new UsersDAO();
+//    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -37,12 +37,6 @@ public class ControllerServlet extends HttpServlet {
         try {
             if (action.equals("/new")) {
                 showNewForm(req, resp);
-            } else if (action.equals("/insert")) {
-                insertUser(req, resp);
-            } else if (action.equals("/delete")) {
-                deleteUser(req, resp);
-            } else if (action.equals("/update")) {
-                updateUser(req, resp);
             } else if (action.equals("/edit")) {
                 showEditForm(req, resp);
             } else {
@@ -54,7 +48,7 @@ public class ControllerServlet extends HttpServlet {
     }
 
     private void listUsers(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException, SQLException {
-        List<User> userList = usersDAO.listAllUsers();
+        List<User> userList = usersDAO.getAllUsers();
         req.setAttribute("listUsers", userList);
         RequestDispatcher requestDispatcher = req.getRequestDispatcher("UsersList.jsp");
         requestDispatcher.forward(req, resp);
@@ -73,36 +67,36 @@ public class ControllerServlet extends HttpServlet {
         requestDispatcher.forward(req, resp);
     }
 
-    private void insertUser(HttpServletRequest req, HttpServletResponse resp)
-            throws SQLException, IOException {
-        String name = req.getParameter("name");
-        String login = req.getParameter("login");
-        String password = req.getParameter("password");
+//    private void insertUser(HttpServletRequest req, HttpServletResponse resp)
+//            throws SQLException, IOException {
+//        String name = req.getParameter("name");
+//        String login = req.getParameter("login");
+//        String password = req.getParameter("password");
+//
+//        User newUser = new User(name, login, password);
+//        usersDAO.insertUser(newUser);
+//        resp.sendRedirect("list");
+//    }
 
-        User newUser = new User(name, login, password);
-        usersDAO.insertUser(newUser);
-        resp.sendRedirect("list");
-    }
+//    private void updateUser(HttpServletRequest req, HttpServletResponse resp)
+//            throws SQLException, IOException {
+//        int id = Integer.parseInt(req.getParameter("id"));
+//        String name = req.getParameter("name");
+//        String login = req.getParameter("login");
+//        String password = req.getParameter("password");
+//
+//        User updatedUser = new User(id, name, login, password);
+//        usersDAO.updateUser(updatedUser);
+//        resp.sendRedirect("list");
+//    }
 
-    private void updateUser(HttpServletRequest req, HttpServletResponse resp)
-            throws SQLException, IOException {
-        int id = Integer.parseInt(req.getParameter("id"));
-        String name = req.getParameter("name");
-        String login = req.getParameter("login");
-        String password = req.getParameter("password");
-
-        User updatedUser = new User(id, name, login, password);
-        usersDAO.updateUser(updatedUser);
-        resp.sendRedirect("list");
-    }
-
-    private void deleteUser(HttpServletRequest req, HttpServletResponse resp)
-            throws SQLException, IOException {
-        int id = Integer.parseInt(req.getParameter("id"));
-
-        User deletedUser = new User(id);
-        usersDAO.deleteUser(deletedUser);
-        resp.sendRedirect("list");
-    }
+//    private void deleteUser(HttpServletRequest req, HttpServletResponse resp)
+//            throws SQLException, IOException {
+//        int id = Integer.parseInt(req.getParameter("id"));
+//
+//        User deletedUser = new User(id);
+//        usersDAO.deleteUser(deletedUser);
+//        resp.sendRedirect("list");
+//    }
 
 }
