@@ -16,9 +16,9 @@
 <div style="text-align: center;">
     <h1>Users Management</h1>
     <h2>
-        <a href="/new">Add New User</a>
+        <a href="/insert">Add New User</a>
         &nbsp;&nbsp;&nbsp;
-        <a href="/list">List All Users</a>
+        <a href="/">List All Users</a>
 
     </h2>
 </div>
@@ -39,7 +39,7 @@
                 <td><c:out value="${user.login}" /></td>
                 <td><c:out value="${user.password}" /></td>
                 <td>
-                    <a href="/edit?id=<c:out value='${user.id}' />">Update</a>
+                    <a href="/update?id=<c:out value='${user.id}' />">Update</a>
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     <a href="/delete?id=<c:out value='${user.id}' />">Delete</a>
                 </td>

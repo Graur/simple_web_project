@@ -1,8 +1,10 @@
 package servlets;
 
+import dao.SQL_Connection;
 import dao.UsersDAO;
 import model.User;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,7 +15,10 @@ import java.sql.SQLException;
 
 @WebServlet("/insert")
 public class InsertUserServlet extends HttpServlet {
-    UsersDAO usersDAO = new UsersDAO();
+    private UsersDAO usersDAO = new UsersDAO(SQL_Connection.getDBConnection());
+
+    public InsertUserServlet() throws SQLException {
+    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -28,5 +33,11 @@ public class InsertUserServlet extends HttpServlet {
         } catch (SQLException e) {
             throw new ServletException(e);
         }
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        RequestDispatcher requestDispatcher = req.getRequestDispatcher("UserForm.jsp");
+        requestDispatcher.forward(req, resp);
     }
 }

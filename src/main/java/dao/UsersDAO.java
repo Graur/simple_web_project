@@ -10,36 +10,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UsersDAO {
-//    private String jdbcURL;
-//    private String jdbcUsername;
-//    private String jdbcPassword;
     private Connection jdbcConnection;
 
-    public UsersDAO() {
+    public UsersDAO(Connection connection) {
+       jdbcConnection = connection;
     }
-
-    //    public UsersDAO(String jdbcURL, String jdbcUsername, String jdbcPassword) {
-//        this.jdbcURL = jdbcURL;
-//        this.jdbcUsername = jdbcUsername;
-//        this.jdbcPassword = jdbcPassword;
+//
+//    protected void connect() throws SQLException {
+//        if(jdbcConnection == null || jdbcConnection.isClosed()) {
+//
+//            jdbcConnection = SQL_Connection.getDBConnection();
+//        }
 //    }
-
-    protected void connect() throws SQLException {
-        if(jdbcConnection == null || jdbcConnection.isClosed()) {
-
-            jdbcConnection = SQL_Connection.getDBConnection();
-        }
-    }
-
-    private void disconnect() throws SQLException {
-        if(jdbcConnection != null || !jdbcConnection.isClosed()){
-            SQL_Connection.closeDBConnection();
-        }
-    }
+//
+//    private void disconnect() throws SQLException {
+//        if(jdbcConnection != null || !jdbcConnection.isClosed()){
+//            SQL_Connection.closeDBConnection();
+//        }
+//    }
 
     public boolean insertUser(User user) throws SQLException {
         String sql = "INSERT INTO user (name, login, password) VALUES (?, ? , ?)";
-        connect();
+//        connect();
 
         PreparedStatement statement = jdbcConnection.prepareStatement(sql);
         statement.setString(1, user.getName());
@@ -48,26 +40,26 @@ public class UsersDAO {
 
         boolean rowInserted = statement.executeUpdate() > 0;
         statement.close();
-        disconnect();
+//        disconnect();
         return rowInserted;
     }
 
     public boolean deleteUser(User user) throws SQLException{
         String sql = "DELETE from user where id = ?";
-        connect();
+//        connect();
 
         PreparedStatement statement = jdbcConnection.prepareStatement(sql);
         statement.setInt(1, user.getId());
 
         boolean rowDeleted = statement.executeUpdate() > 0;
         statement.close();
-        disconnect();
+//        disconnect();
         return rowDeleted;
     }
 
     public boolean updateUser(User user) throws SQLException{
         String sql = "UPDATE user SET name = ?, login = ?, password = ? WHERE id = ?";
-        connect();
+//        connect();
 
         PreparedStatement statement = jdbcConnection.prepareStatement(sql);
         statement.setString(1, user.getName());
@@ -77,7 +69,7 @@ public class UsersDAO {
 
         boolean rowUpdated = statement.executeUpdate() > 0;
         statement.close();
-        disconnect();
+//        disconnect();
         return rowUpdated;
     }
 
@@ -85,7 +77,7 @@ public class UsersDAO {
         User user = null;
         String sql = "SELECT * FROM user WHERE id = ?";
 
-        connect();
+//        connect();
 
         PreparedStatement statement = jdbcConnection.prepareStatement(sql);
         statement.setInt(1, id);
@@ -109,7 +101,7 @@ public class UsersDAO {
         List<User> list = new ArrayList<>();
         String sql = "SELECT * FROM user";
 
-        connect();
+//        connect();
 
         PreparedStatement statement = jdbcConnection.prepareStatement(sql);
         ResultSet resultSet = statement.executeQuery();
@@ -125,7 +117,7 @@ public class UsersDAO {
 
         resultSet.close();
         statement.close();
-        disconnect();
+//        disconnect();
         return list;
     }
 }

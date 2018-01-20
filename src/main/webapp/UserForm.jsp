@@ -16,9 +16,9 @@
 <div style="text-align: center;">
     <h1>Users Management</h1>
     <h2>
-        <a href="/new">Add New User</a>
+        <a href="/insert">Add New User</a>
         &nbsp;&nbsp;&nbsp;
-        <a href="/list">List All Users</a>
+        <a href="/">List All Users</a>
     </h2>
 </div>
 <div align="center">
@@ -43,9 +43,15 @@
                     <input type="hidden" name="id" value="<c:out value='${user.id}' />" />
                 </c:if>
                 <tr>
+                    <th>ID: </th>
+                    <td>
+                        <c:out value="${user.id}" />
+                    </td>
+                </tr>
+                <tr>
                     <th>Name: </th>
                     <td>
-                        <input type="text" name="name" size="45"
+                        <input type="text" name="name" size="45" placeholder="Enter name"
                                value="<c:out value='${user.name}' />"
                         />
                     </td>
@@ -53,7 +59,7 @@
                 <tr>
                     <th>Login: </th>
                     <td>
-                        <input type="text" name="login" size="45"
+                        <input type="text" name="login" size="45" placeholder="Enter login"
                                value="<c:out value='${user.login}' />"
                         />
                     </td>
@@ -61,7 +67,7 @@
                 <tr>
                     <th>Password: </th>
                     <td>
-                        <input type="text" name="password" size="45"
+                        <input type="text" name="password" size="45" placeholder="Enter password"
                                value="<c:out value='${user.password}' />"
                         />
                     </td>

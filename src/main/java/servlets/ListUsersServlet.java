@@ -1,5 +1,6 @@
 package servlets;
 
+import dao.SQL_Connection;
 import dao.UsersDAO;
 import model.User;
 
@@ -13,9 +14,12 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
-@WebServlet ("/list")
+@WebServlet ("/")
 public class ListUsersServlet extends HttpServlet {
-    UsersDAO usersDAO = new UsersDAO();
+    private UsersDAO usersDAO = new UsersDAO(SQL_Connection.getDBConnection());
+
+    public ListUsersServlet() throws SQLException {
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
