@@ -13,7 +13,6 @@ public class UsersHibernateDAO {
 
     public List<User> getAllUsers() {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        session.beginTransaction();
         List<User> users = session.createQuery("FROM model.User").list();
         session.close();
         return users;
@@ -30,7 +29,7 @@ public class UsersHibernateDAO {
     public void deleteUser(int id){
         Session session = HibernateUtil.getSessionFactory().openSession();
         session.beginTransaction();
-        User user = session.load(User.class, new Integer(id));
+        User user = session.load(User.class, id);
         session.delete(user);
         session.getTransaction().commit();
         session.close();
