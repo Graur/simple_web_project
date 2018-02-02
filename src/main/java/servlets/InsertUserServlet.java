@@ -1,6 +1,6 @@
 package servlets;
 
-import dao.UsersHibernateDAO;
+import dao.UsersDaoHibernateImpl;
 import model.User;
 
 import javax.servlet.RequestDispatcher;
@@ -14,7 +14,7 @@ import java.sql.SQLException;
 
 @WebServlet("/insert")
 public class InsertUserServlet extends HttpServlet {
-    private UsersHibernateDAO usersHibernateDAO = new UsersHibernateDAO();
+    private UsersDaoHibernateImpl usersHibernateDAO = new UsersDaoHibernateImpl();
 
     public InsertUserServlet() throws SQLException {
     }

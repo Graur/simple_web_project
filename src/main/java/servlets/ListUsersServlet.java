@@ -1,6 +1,6 @@
 package servlets;
 
-import dao.UsersHibernateDAO;
+import dao.UsersDaoHibernateImpl;
 import model.User;
 
 import javax.servlet.RequestDispatcher;
@@ -14,7 +14,7 @@ import java.util.List;
 
 @WebServlet ("/")
 public class ListUsersServlet extends HttpServlet {
-    private UsersHibernateDAO userHiberDAO = new UsersHibernateDAO();
+    private UsersDaoHibernateImpl userHiberDAO = new UsersDaoHibernateImpl();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

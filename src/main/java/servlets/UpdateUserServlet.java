@@ -1,6 +1,6 @@
 package servlets;
 
-import dao.UsersHibernateDAO;
+import dao.UsersDaoHibernateImpl;
 import model.User;
 
 import javax.servlet.RequestDispatcher;
@@ -13,7 +13,7 @@ import java.io.IOException;
 
 @WebServlet("/update")
 public class UpdateUserServlet extends HttpServlet {
-    private UsersHibernateDAO usersHibernateDAO = new UsersHibernateDAO();
+    private UsersDaoHibernateImpl usersHibernateDAO = new UsersDaoHibernateImpl();
 
     public UpdateUserServlet() {
     }

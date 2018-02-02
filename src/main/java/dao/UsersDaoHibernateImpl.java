@@ -6,9 +6,9 @@ import org.hibernate.query.Query;
 
 import java.util.List;
 
-public class UsersHibernateDAO {
+public class UsersDaoHibernateImpl implements UsersDAO {
 
-    public UsersHibernateDAO() {
+    public UsersDaoHibernateImpl() {
     }
 
     public List<User> getAllUsers() {

@@ -1,6 +1,6 @@
 package servlets;
 
-import dao.UsersHibernateDAO;
+import dao.UsersDaoHibernateImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,7 +11,7 @@ import java.io.IOException;
 
 @WebServlet("/delete")
 public class DeleteUserServlet extends HttpServlet {
-    private UsersHibernateDAO usersHibernateDAO = new UsersHibernateDAO();
+    private UsersDaoHibernateImpl usersHibernateDAO = new UsersDaoHibernateImpl();
 
     public DeleteUserServlet(){
     }
