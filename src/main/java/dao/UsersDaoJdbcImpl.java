@@ -1,5 +1,6 @@
 package dao;
 
+import dbHelper.DBHelper;
 import model.User;
 
 import java.sql.Connection;
@@ -18,13 +19,13 @@ public class UsersDaoJdbcImpl implements UsersDAO {
     private void connect() throws SQLException {
         if(jdbcConnection == null || jdbcConnection.isClosed()) {
 
-            jdbcConnection = SQL_Connection.getDBConnection();
+            jdbcConnection = DBHelper.instance().getConnection();
         }
     }
 
     private void disconnect() throws SQLException {
         if(jdbcConnection != null || !jdbcConnection.isClosed()){
-            SQL_Connection.closeDBConnection();
+            jdbcConnection.close();
         }
     }
 

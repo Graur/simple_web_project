@@ -12,6 +12,7 @@ public class UsersDaoFactory {
         FileInputStream fileInputStream;
         Properties property = new Properties();
         System.out.println(new File(".").getAbsolutePath());
+
         try{
           fileInputStream = new FileInputStream(PATH_TO_PROPERTIES);
 
