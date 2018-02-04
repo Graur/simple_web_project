@@ -1,6 +1,7 @@
 package servlets;
 
-import dao.UsersDaoHibernateImpl;
+import dao.UsersDAO;
+import dao.UsersDaoFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,15 +12,15 @@ import java.io.IOException;
 
 @WebServlet("/delete")
 public class DeleteUserServlet extends HttpServlet {
-    private UsersDaoHibernateImpl usersHibernateDAO = new UsersDaoHibernateImpl();
+    private UsersDAO usersDAO = UsersDaoFactory.getUsersDAO();
 
     public DeleteUserServlet(){
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-            int id = Integer.parseInt(req.getParameter("id"));
-            usersHibernateDAO.deleteUser(id);
-            resp.sendRedirect("list");
+        int id = Integer.parseInt(req.getParameter("id"));
+        usersDAO.deleteUser(id);
+        resp.sendRedirect("list");
    }
 }

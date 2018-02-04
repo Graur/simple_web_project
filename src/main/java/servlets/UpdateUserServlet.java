@@ -1,6 +1,7 @@
 package servlets;
 
-import dao.UsersDaoHibernateImpl;
+import dao.UsersDAO;
+import dao.UsersDaoFactory;
 import model.User;
 
 import javax.servlet.RequestDispatcher;
@@ -13,7 +14,7 @@ import java.io.IOException;
 
 @WebServlet("/update")
 public class UpdateUserServlet extends HttpServlet {
-    private UsersDaoHibernateImpl usersHibernateDAO = new UsersDaoHibernateImpl();
+    private UsersDAO usersDAO = UsersDaoFactory.getUsersDAO();
 
     public UpdateUserServlet() {
     }
@@ -25,14 +26,14 @@ public class UpdateUserServlet extends HttpServlet {
             String login = req.getParameter("login");
             String password = req.getParameter("password");
             User updatedUser = new User(id, name, login, password);
-            usersHibernateDAO.updateUser(updatedUser);
+            usersDAO.updateUser(updatedUser);
             resp.sendRedirect("list");
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
             int id = Integer.parseInt(req.getParameter("id"));
-            User existingUser = usersHibernateDAO.getUser(id);
+            User existingUser = usersDAO.getUser(id);
             RequestDispatcher requestDispatcher = req.getRequestDispatcher("UserForm.jsp");
             req.setAttribute("user", existingUser);
             requestDispatcher.forward(req, resp);

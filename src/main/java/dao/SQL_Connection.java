@@ -8,7 +8,7 @@ public class SQL_Connection {
     private static Connection connection;
 
 
-        public static Connection getDBConnection() throws SQLException {
+    public static Connection getDBConnection() throws SQLException {
         String jdbcURL = "jdbc:mysql://localhost:3306/users";
         String jdbcUsername = "root";
         String jdbcPassword = "root";
@@ -22,7 +22,9 @@ public class SQL_Connection {
         return connection;
     }
 
-
+    public static void closeDBConnection() throws SQLException {
+        connection.close();
+    }
 }
 
 

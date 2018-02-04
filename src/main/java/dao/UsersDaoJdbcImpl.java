@@ -12,27 +12,27 @@ import java.util.List;
 public class UsersDaoJdbcImpl implements UsersDAO {
     private Connection jdbcConnection;
 
-    public UsersDaoJdbcImpl(Connection connection) {
-       jdbcConnection = connection;
+    public UsersDaoJdbcImpl() {
     }
-//
-//    protected void connect() throws SQLException {
-//        if(jdbcConnection == null || jdbcConnection.isClosed()) {
-//
-//            jdbcConnection = SQL_Connection.getDBConnection();
-//        }
-//    }
-//
-//    private void disconnect() throws SQLException {
-//        if(jdbcConnection != null || !jdbcConnection.isClosed()){
-//            SQL_Connection.closeDBConnection();
-//        }
-//    }
+
+    private void connect() throws SQLException {
+        if(jdbcConnection == null || jdbcConnection.isClosed()) {
+
+            jdbcConnection = SQL_Connection.getDBConnection();
+        }
+    }
+
+    private void disconnect() throws SQLException {
+        if(jdbcConnection != null || !jdbcConnection.isClosed()){
+            SQL_Connection.closeDBConnection();
+        }
+    }
 
     public void insertUser(User user) {
         String sql = "INSERT INTO user (name, login, password) VALUES (?, ? , ?)";
-//        connect();
+
         try {
+            connect();
             PreparedStatement statement = jdbcConnection.prepareStatement(sql);
             statement.setString(1, user.getName());
             statement.setString(2, user.getLogin());
@@ -40,32 +40,34 @@ public class UsersDaoJdbcImpl implements UsersDAO {
 
             statement.executeUpdate();
             statement.close();
+            disconnect();
         }catch (SQLException e){
             e.printStackTrace();
         }
-//        disconnect();
+
     }
 
     public void deleteUser(int id){
         String sql = "DELETE from user where id = ?";
-//        connect();
+
         try{
+            connect();
             PreparedStatement statement = jdbcConnection.prepareStatement(sql);
             statement.setInt(1, id);
 
             statement.executeUpdate();
             statement.close();
+            disconnect();
         }catch (SQLException e){
             e.printStackTrace();
         }
-//        disconnect();
-
     }
 
     public void updateUser(User user){
         String sql = "UPDATE user SET name = ?, login = ?, password = ? WHERE id = ?";
-//        connect();
+
         try{
+            connect();
             PreparedStatement statement = jdbcConnection.prepareStatement(sql);
             statement.setString(1, user.getName());
             statement.setString(2, user.getLogin());
@@ -74,17 +76,17 @@ public class UsersDaoJdbcImpl implements UsersDAO {
 
             statement.executeUpdate();
             statement.close();
+            disconnect();
         }catch (SQLException e){
             e.printStackTrace();
         }
-//        disconnect();
     }
 
     public User getUser(int id){
         User user = null;
         String sql = "SELECT * FROM user WHERE id = ?";
-//        connect();
         try{
+            connect();
             PreparedStatement statement = jdbcConnection.prepareStatement(sql);
             statement.setInt(1, id);
 
@@ -100,6 +102,7 @@ public class UsersDaoJdbcImpl implements UsersDAO {
 
             resultSet.close();
             statement.close();
+            disconnect();
         }catch (SQLException e){
             e.printStackTrace();
         }
@@ -111,8 +114,8 @@ public class UsersDaoJdbcImpl implements UsersDAO {
         List<User> list = new ArrayList<>();
         String sql = "SELECT * FROM user";
 
-//        connect();
         try{
+            connect();
             PreparedStatement statement = jdbcConnection.prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery();
 
@@ -127,10 +130,10 @@ public class UsersDaoJdbcImpl implements UsersDAO {
 
             resultSet.close();
             statement.close();
+            disconnect();
         }catch (SQLException e){
             e.printStackTrace();
         }
-//        disconnect();
         return list;
     }
 }
