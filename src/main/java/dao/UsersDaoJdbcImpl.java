@@ -1,6 +1,5 @@
 package dao;
 
-import dbHelper.DBHelper;
 import model.User;
 
 import java.sql.Connection;
@@ -13,27 +12,14 @@ import java.util.List;
 public class UsersDaoJdbcImpl implements UsersDAO {
     private Connection jdbcConnection;
 
-    public UsersDaoJdbcImpl() {
-    }
-
-    private void connect() throws SQLException {
-        if(jdbcConnection == null || jdbcConnection.isClosed()) {
-
-            jdbcConnection = DBHelper.instance().getConnection();
-        }
-    }
-
-    private void disconnect() throws SQLException {
-        if(jdbcConnection != null || !jdbcConnection.isClosed()){
-            jdbcConnection.close();
-        }
+    public UsersDaoJdbcImpl(Connection connection) {
+        jdbcConnection = connection;
     }
 
     public void insertUser(User user) {
         String sql = "INSERT INTO user (name, login, password) VALUES (?, ? , ?)";
 
         try {
-            connect();
             PreparedStatement statement = jdbcConnection.prepareStatement(sql);
             statement.setString(1, user.getName());
             statement.setString(2, user.getLogin());
@@ -41,7 +27,6 @@ public class UsersDaoJdbcImpl implements UsersDAO {
 
             statement.executeUpdate();
             statement.close();
-            disconnect();
         }catch (SQLException e){
             e.printStackTrace();
         }
@@ -52,13 +37,11 @@ public class UsersDaoJdbcImpl implements UsersDAO {
         String sql = "DELETE from user where id = ?";
 
         try{
-            connect();
             PreparedStatement statement = jdbcConnection.prepareStatement(sql);
             statement.setInt(1, id);
 
             statement.executeUpdate();
             statement.close();
-            disconnect();
         }catch (SQLException e){
             e.printStackTrace();
         }
@@ -68,7 +51,6 @@ public class UsersDaoJdbcImpl implements UsersDAO {
         String sql = "UPDATE user SET name = ?, login = ?, password = ? WHERE id = ?";
 
         try{
-            connect();
             PreparedStatement statement = jdbcConnection.prepareStatement(sql);
             statement.setString(1, user.getName());
             statement.setString(2, user.getLogin());
@@ -77,7 +59,6 @@ public class UsersDaoJdbcImpl implements UsersDAO {
 
             statement.executeUpdate();
             statement.close();
-            disconnect();
         }catch (SQLException e){
             e.printStackTrace();
         }
@@ -87,7 +68,6 @@ public class UsersDaoJdbcImpl implements UsersDAO {
         User user = null;
         String sql = "SELECT * FROM user WHERE id = ?";
         try{
-            connect();
             PreparedStatement statement = jdbcConnection.prepareStatement(sql);
             statement.setInt(1, id);
 
@@ -103,7 +83,6 @@ public class UsersDaoJdbcImpl implements UsersDAO {
 
             resultSet.close();
             statement.close();
-            disconnect();
         }catch (SQLException e){
             e.printStackTrace();
         }
@@ -116,7 +95,6 @@ public class UsersDaoJdbcImpl implements UsersDAO {
         String sql = "SELECT * FROM user";
 
         try{
-            connect();
             PreparedStatement statement = jdbcConnection.prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery();
 
@@ -131,7 +109,6 @@ public class UsersDaoJdbcImpl implements UsersDAO {
 
             resultSet.close();
             statement.close();
-            disconnect();
         }catch (SQLException e){
             e.printStackTrace();
         }

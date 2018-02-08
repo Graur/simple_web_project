@@ -3,24 +3,31 @@ package dao;
 import dbHelper.DBHelper;
 import model.User;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
+import org.hibernate.service.ServiceRegistry;
 
 import java.util.List;
 
 public class UsersDaoHibernateImpl implements UsersDAO {
+    private SessionFactory sessionFactory;
 
-    public UsersDaoHibernateImpl() {
+    public UsersDaoHibernateImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
+
     public List<User> getAllUsers() {
-        Session session = DBHelper.instance().getConfiguration().openSession();
+        Session session = sessionFactory.openSession();
         List<User> users = session.createQuery("FROM model.User").list();
         session.close();
         return users;
     }
 
     public void insertUser(User user){
-        Session session = DBHelper.instance().getConfiguration().openSession();
+        Session session = sessionFactory.openSession();
         session.beginTransaction();
         session.save(user);
         session.getTransaction().commit();
@@ -28,7 +35,7 @@ public class UsersDaoHibernateImpl implements UsersDAO {
     }
 
     public void deleteUser(int id){
-        Session session = DBHelper.instance().getConfiguration().openSession();
+        Session session = sessionFactory.openSession();
         session.beginTransaction();
         User user = session.load(User.class, id);
         session.delete(user);
@@ -37,7 +44,7 @@ public class UsersDaoHibernateImpl implements UsersDAO {
     }
 
     public void updateUser(User user) {
-        Session session = DBHelper.instance().getConfiguration().openSession();
+        Session session = sessionFactory.openSession();
         session.beginTransaction();
         session.update(user);
         session.getTransaction().commit();
@@ -45,7 +52,7 @@ public class UsersDaoHibernateImpl implements UsersDAO {
     }
 
     public User getUser(int id){
-        Session session = DBHelper.instance().getConfiguration().openSession();
+        Session session = sessionFactory.openSession();
         session.beginTransaction();
         String queryString = "FROM model.User WHERE id = :id";
         Query query = session.createQuery(queryString);

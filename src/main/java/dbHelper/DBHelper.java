@@ -2,62 +2,79 @@ package dbHelper;
 
 import model.User;
 import org.hibernate.SessionFactory;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.service.ServiceRegistry;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 public class DBHelper {
-    private static DBHelper singleton;
+    private static DBHelper instance;
     private java.sql.Connection connection;
-    private org.hibernate.SessionFactory sessionFactory;
+    private SessionFactory sessionFactory;
 
-    public DBHelper() {
-
+    private DBHelper() {
     }
 
-    public static DBHelper instance(){
-        if(singleton == null){
-            singleton = new DBHelper();
+    public static synchronized DBHelper getInstance(){
+        if(instance == null){
+            instance = new DBHelper();
         }
-        return singleton;
+        return instance;
     }
 
 
-    public Connection getConnection() throws SQLException {
-        String jdbcURL = "jdbc:mysql://localhost:3306/users";
-        String jdbcUsername = "root";
-        String jdbcPassword = "root";
+    public Connection getConnection() {
+        Properties properties = new Properties();
+        try {
+            properties.load(DBHelper.class.getResourceAsStream("/config.properties"));
+        } catch (IOException e) {
+            System.err.println("IOException in method getConnection");
+        }
 
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName(properties.getProperty("db.driver_class"));
         } catch (ClassNotFoundException e){
-            throw new SQLException(e);
+            System.err.println("ClassNotFoundException in method getConnection");
         }
-        connection = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
+        try {
+            connection = DriverManager.getConnection(properties.getProperty("db.url"),
+                    properties.getProperty("db.username"), properties.getProperty("db.password"));
+        } catch (SQLException e) {
+            System.err.println("SQLException in method getConnection");
+            e.printStackTrace();
+        }
         return connection;
     }
 
-    public SessionFactory getConfiguration(){
+    public Configuration getConfiguration(){
+        //path to properties
+        Properties properties = new Properties();
+        try {
+            properties.load(DBHelper.class.getResourceAsStream("/config.properties"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         // Create configuration
         Configuration configuration = new Configuration();
         configuration.addAnnotatedClass(User.class);
 
-        configuration.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
-        configuration.setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
-        configuration.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/users");
-        configuration.setProperty("hibernate.connection.username", "root");
-        configuration.setProperty("hibernate.connection.password", "root");
-        configuration.setProperty("hibernate.show_sql", "true");
-        configuration.setProperty("hibernate.hbm2ddl.auto", "update");
+        configuration.setProperty("hibernate.dialect", properties.getProperty("hibernate.dialect"));
+        configuration.setProperty("hibernate.connection.driver_class", properties.getProperty("db.driver_class"));
+        configuration.setProperty("hibernate.connection.url", properties.getProperty("db.url"));
+        configuration.setProperty("hibernate.connection.username", properties.getProperty("db.username"));
+        configuration.setProperty("hibernate.connection.password", properties.getProperty("db.password"));
+        configuration.setProperty("hibernate.show_sql", properties.getProperty("hibernate.show_sql"));
+        configuration.setProperty("hibernate.hbm2ddl.auto", properties.getProperty("hibernate.hbm2ddl.auto"));
 
+        return configuration;
         //create session factory
-        StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder();
-        builder.applySettings(configuration.getProperties());
-        ServiceRegistry serviceRegistry = builder.build();
-        return sessionFactory = configuration.buildSessionFactory(serviceRegistry);
+//        StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder();
+//        builder.applySettings(configuration.getProperties());
+//        ServiceRegistry serviceRegistry = builder.build();
+//        return sessionFactory = configuration.buildSessionFactory(serviceRegistry);
     }
 }
