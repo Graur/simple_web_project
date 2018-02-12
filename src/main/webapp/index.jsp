@@ -13,9 +13,9 @@
 <body>
 <p>Welcome! Please, sign up.</p>
 
-<form action="/" method="POST">
+<form action="LoginServlet" method="POST">
     Login: <input type="text" name="login"/>
-    Password: <input type="password" name="pass"/>
+    Password: <input type="password" name="password"/>
     <input type="submit" value="Sign up">
 </form>
 </body>
