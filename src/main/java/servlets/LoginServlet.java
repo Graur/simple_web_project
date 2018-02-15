@@ -1,17 +1,12 @@
 package servlets;
 
-import dao.UsersDAO;
-import dao.UsersDaoFactory;
-import model.User;
-
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/")
+//@WebServlet("/")
 public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -20,9 +15,10 @@ public class LoginServlet extends HttpServlet {
         String login = req.getParameter("login");
         String password = req.getParameter("password");
 
-        UsersDAO usersDAO = UsersDaoFactory.getUsersDAO();
-        User user = new User(login, password);
-        usersDAO.insertUser(user);
+//        UsersDAO usersDAO = UsersDaoFactory.getUsersDAO();
+//        User user = new User(login, password);
+//        usersDAO.insertUser(user);
+        req.getRequestDispatcher("UsersList.jsp").forward(req, resp);
         System.out.println("end LoginServlet");
     }
 }

@@ -8,15 +8,15 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Welcome</title>
+    <title>Login</title>
 </head>
 <body>
-<p>Welcome! Please, sign up.</p>
+<p>L2.1 Graur example</p>
 
-<form action="LoginServlet" method="POST">
+<form action="ListUsersServlet" method="POST">
     Login: <input type="text" name="login"/>
     Password: <input type="password" name="password"/>
-    <input type="submit" value="Sign up">
+    <input type="submit" value="Sign in">
 </form>
 </body>
 </html>
