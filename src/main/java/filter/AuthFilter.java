@@ -5,16 +5,17 @@ import dao.UsersDaoFactory;
 import model.User;
 
 import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-//@WebFilter("/")
+@WebFilter(urlPatterns = "/auth",
+        filterName = "AdminFilter",
+        description = "Filter all admin URLs" )
 public class AuthFilter implements Filter {
     private UsersDAO usersDAO = UsersDaoFactory.getUsersDAO();
-    private List<User> userList;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -30,24 +31,24 @@ public class AuthFilter implements Filter {
 
         final String login = req.getParameter("login");
         final String password = req.getParameter("password");
+        System.out.println("Фильтр аутентификации, пользователь::" + login + " " + password);
 
-        final HttpSession session = req.getSession();
+        String uri = req.getRequestURI();
+        System.out.println("Requested Resource::" + uri);
 
-        if ((session.getAttribute("login") != null) && (session.getAttribute("password") != null)){
-            final User.ROLE role = (User.ROLE) session.getAttribute("role");
-            moveToMenu(req, resp, role);
-        } else if (userIsExist(login, password)){
+        if(userIsExist(login, password)){
             final User.ROLE role = getRoleByLoginAndPass(login, password);
             moveToMenu(req, resp, role);
         } else {
             moveToMenu(req, resp, User.ROLE.UNKNOWN);
         }
+
         System.out.println("end doFilter");
     }
 
-    private void moveToMenu(HttpServletRequest req, HttpServletResponse resp, User.ROLE role) throws ServletException, IOException {
+        private void moveToMenu(HttpServletRequest req, HttpServletResponse resp, User.ROLE role) throws ServletException, IOException {
         if (role.equals(User.ROLE.ADMIN)){
-            RequestDispatcher requestDispatcher = req.getRequestDispatcher("/UsersList.jsp");
+            RequestDispatcher requestDispatcher = req.getRequestDispatcher("/admin");
             requestDispatcher.forward(req, resp);
             System.out.println("filter role ADMIN");
         } else if (role.equals(User.ROLE.USER)){
@@ -64,7 +65,7 @@ public class AuthFilter implements Filter {
     private boolean userIsExist (String login, String password){
         boolean result = false;
 
-        userList = usersDAO.getAllUsers();
+        List<User> userList = usersDAO.getAllUsers();
 
         for (User user : userList){
             if((user.getLogin().equals(login)) && (user.getPassword().equals(password))){
@@ -77,18 +78,15 @@ public class AuthFilter implements Filter {
     }
 
     private User.ROLE getRoleByLoginAndPass(String login, String password){
-        User.ROLE result = User.ROLE.UNKNOWN;
+        User.ROLE result;
 
-        userList = usersDAO.getAllUsers();
-
-        for (User user : userList){
-            if((user.getLogin().equals("admin")) && (user.getPassword().equals("admin"))){
-                result = User.ROLE.ADMIN;
-            } else if (!(user.getLogin().isEmpty()) && (!(user.getPassword().isEmpty()))){
-                result = User.ROLE.USER;
-                usersDAO.insertUser(new User(login, password));
-            }
+        if((login.equals("admin")) && (password.equals("admin"))){
+            result = User.ROLE.ADMIN;
+        } else {
+            result = User.ROLE.USER;
+            usersDAO.insertUser(new User(login, password));
         }
+
 
         return result;
     }

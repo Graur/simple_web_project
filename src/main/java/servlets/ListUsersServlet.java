@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet ("/ListUsersServlet")
+@WebServlet ("/admin")
 public class ListUsersServlet extends HttpServlet {
     private UsersDAO usersDAO = UsersDaoFactory.getUsersDAO();
 
