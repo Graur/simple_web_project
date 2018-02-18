@@ -9,7 +9,6 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
 @WebFilter(urlPatterns = "/auth",
         filterName = "AdminFilter",
@@ -36,12 +35,17 @@ public class AuthFilter implements Filter {
         String uri = req.getRequestURI();
         System.out.println("Requested Resource::" + uri);
 
-        if(userIsExist(login, password)){
-            final User.ROLE role = getRoleByLoginAndPass(login, password);
-            moveToMenu(req, resp, role);
-        } else {
-            moveToMenu(req, resp, User.ROLE.UNKNOWN);
-        }
+//        Cookie userCookie = null;
+//
+//        Cookie[] cookies = req.getCookies();
+//        for(Cookie cookie : cookies){
+//            if(cookie.getName().equals("userCookie")){
+//                userCookie = cookie;
+//            }
+//        }
+
+        final User.ROLE role = getRoleByLoginAndPass(login, password);
+        moveToMenu(req, resp, role);
 
         System.out.println("end doFilter");
     }
@@ -52,7 +56,7 @@ public class AuthFilter implements Filter {
             requestDispatcher.forward(req, resp);
             System.out.println("filter role ADMIN");
         } else if (role.equals(User.ROLE.USER)){
-            RequestDispatcher requestDispatcher = req.getRequestDispatcher("/user.jsp");
+            RequestDispatcher requestDispatcher = req.getRequestDispatcher("/user");
             requestDispatcher.forward(req, resp);
             System.out.println("filter role User");
         } else  {
@@ -62,31 +66,32 @@ public class AuthFilter implements Filter {
         }
     }
 
-    private boolean userIsExist (String login, String password){
-        boolean result = false;
-
-        List<User> userList = usersDAO.getAllUsers();
-
-        for (User user : userList){
-            if((user.getLogin().equals(login)) && (user.getPassword().equals(password))){
-                result = true;
-                break;
-            }
-        }
-
-        return  result;
-    }
+//    private boolean userIsExist (String login, String password){
+//        boolean result = false;
+//
+//        List<User> userList = usersDAO.getAllUsers();
+//
+//        for (User user : userList){
+//            if((user.getLogin().equals(login)) && (user.getPassword().equals(password))){
+//                result = true;
+//                break;
+//            }
+//        }
+//
+//        return  result;
+//    }
 
     private User.ROLE getRoleByLoginAndPass(String login, String password){
         User.ROLE result;
 
         if((login.equals("admin")) && (password.equals("admin"))){
             result = User.ROLE.ADMIN;
+
         } else {
             result = User.ROLE.USER;
             usersDAO.insertUser(new User(login, password));
-        }
 
+        }
 
         return result;
     }
