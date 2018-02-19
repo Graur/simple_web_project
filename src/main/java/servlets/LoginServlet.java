@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/auth")
+@WebServlet("/login")
 public class LoginServlet extends HttpServlet {
     private UsersDAO usersDAO = UsersDaoFactory.getUsersDAO();
 
@@ -24,9 +24,11 @@ public class LoginServlet extends HttpServlet {
         String pass = req.getParameter("password");
 
         if(userIsExist(login, pass)){
-            Cookie cookie = new Cookie("userCookie",login);
+            User.ROLE userRole = getRoleByLoginAndPass(login, pass);
+            Cookie cookie = new Cookie(userRole.toString(),login + userRole.toString());
+            System.out.println(userRole.toString());
             resp.addCookie(cookie);
-            RequestDispatcher requestDispatcher = req.getRequestDispatcher("/auth");
+            RequestDispatcher requestDispatcher = req.getRequestDispatcher("/user");
             requestDispatcher.forward(req, resp);
         } else {
             resp.sendRedirect("/index.jsp");
@@ -46,5 +48,20 @@ public class LoginServlet extends HttpServlet {
         }
 
         return  result;
+    }
+
+    private User.ROLE getRoleByLoginAndPass(String login, String password){
+        User.ROLE result;
+
+        if((login.equals("admin")) && (password.equals("admin"))){
+            result = User.ROLE.ADMIN;
+
+        } else {
+            result = User.ROLE.USER;
+            usersDAO.insertUser(new User(login, password));
+
+        }
+
+        return result;
     }
 }

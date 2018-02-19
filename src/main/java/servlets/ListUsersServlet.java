@@ -7,7 +7,6 @@ import model.User;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,10 +23,11 @@ public class ListUsersServlet extends HttpServlet {
         String uri = req.getRequestURI();
         System.out.println("Requested Resource from GET method of ListUsersServlet::" + uri);
 
-            List<User> userList = usersDAO.getAllUsers();
-            req.setAttribute("listUsers", userList);
-            RequestDispatcher requestDispatcher = req.getRequestDispatcher("UsersList.jsp");
-            requestDispatcher.forward(req, resp);
+        //list of users
+        List<User> userList = usersDAO.getAllUsers();
+        req.setAttribute("listUsers", userList);
+        RequestDispatcher requestDispatcher = req.getRequestDispatcher("UsersList.jsp");
+        requestDispatcher.forward(req, resp);
     }
 
     @Override
@@ -36,8 +36,5 @@ public class ListUsersServlet extends HttpServlet {
         String uri = req.getRequestURI();
         System.out.println("Requested Resource from POST method of ListUsersServlet::" + uri);
 
-        Cookie cookie = new Cookie("adminCookie", "007");
-        resp.addCookie(cookie);
-        doGet(req, resp);
     }
 }
