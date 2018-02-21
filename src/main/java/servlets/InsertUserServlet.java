@@ -27,7 +27,7 @@ public class InsertUserServlet extends HttpServlet {
             String password = req.getParameter("password");
             User newUser = new User(name, login, password);
             usersDAO.insertUser(newUser);
-            resp.sendRedirect("list");
+            resp.sendRedirect("admin");
     }
 
     @Override

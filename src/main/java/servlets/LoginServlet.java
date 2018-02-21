@@ -4,7 +4,6 @@ import dao.UsersDAO;
 import dao.UsersDaoFactory;
 import model.User;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
@@ -22,14 +21,25 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String login = req.getParameter("login");
         String pass = req.getParameter("password");
+        Cookie[] cookies = req.getCookies();
+        Cookie cookie;
 
         if(userIsExist(login, pass)){
             User.ROLE userRole = getRoleByLoginAndPass(login, pass);
-            Cookie cookie = new Cookie(userRole.toString(),login + userRole.toString());
-            System.out.println(userRole.toString());
+
+            for (Cookie delCookie : cookies){
+                if (delCookie.getName().equals(User.ROLE.USER.toString()) || delCookie.getName().equals(User.ROLE.ADMIN.toString())) {
+                    delCookie.setValue("");
+                    delCookie.setPath("/");
+                    delCookie.setMaxAge(0);
+                    resp.addCookie(delCookie);
+                }
+            }
+
+            cookie = new Cookie(userRole.toString(), login);
+            System.out.println("login: " + userRole.toString());
             resp.addCookie(cookie);
-            RequestDispatcher requestDispatcher = req.getRequestDispatcher("/user");
-            requestDispatcher.forward(req, resp);
+            resp.sendRedirect("/admin");
         } else {
             resp.sendRedirect("/index.jsp");
         }

@@ -27,7 +27,7 @@ public class UpdateUserServlet extends HttpServlet {
             String password = req.getParameter("password");
             User updatedUser = new User(id, name, login, password);
             usersDAO.updateUser(updatedUser);
-            resp.sendRedirect("list");
+            resp.sendRedirect("admin");
     }
 
     @Override

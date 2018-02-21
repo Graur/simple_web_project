@@ -21,6 +21,6 @@ public class DeleteUserServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int id = Integer.parseInt(req.getParameter("id"));
         usersDAO.deleteUser(id);
-        resp.sendRedirect("list");
+        resp.sendRedirect("admin");
    }
 }

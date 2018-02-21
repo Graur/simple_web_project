@@ -18,7 +18,7 @@
     <h2>
         <a href="/insert">Add New User</a>
         &nbsp;&nbsp;&nbsp;
-        <a href="/">List All Users</a>
+        <a href="/admin">List All Users</a>
     </h2>
 </div>
 <div align="center">

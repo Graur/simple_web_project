@@ -9,14 +9,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-
 @WebFilter(urlPatterns = {"/user", "/admin"},
         description = "Filter all admin URLs")
 public class UsersFilter implements Filter {
+    FilterConfig fConfig;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-
+        if (filterConfig == null) {
+            this.fConfig = filterConfig;
+        }
     }
 
     @Override
@@ -28,20 +30,22 @@ public class UsersFilter implements Filter {
         Cookie[] cookies = req.getCookies();
         for(Cookie cookie : cookies){
             if(cookie.getName().equals(User.ROLE.ADMIN.toString())){
-                RequestDispatcher requestDispatcher = req.getRequestDispatcher("/admin");
-                requestDispatcher.forward(req, resp);
                 System.out.println("filter role ADMIN");
                 System.out.println(User.ROLE.ADMIN.toString());
-            } else if (cookie.getName().equals(User.ROLE.USER.toString())){
-                chain.doFilter(request, response);
+//                RequestDispatcher requestDispatcher = req.getRequestDispatcher("/admin");
+//                requestDispatcher.forward(req, resp);
+                chain.doFilter(req, resp);
+            } else if ((cookie.getName().equals(User.ROLE.USER.toString())) || (cookie.getName().equals(User.ROLE.ADMIN.toString()))){
                 System.out.println("filter role User");
                 System.out.println(User.ROLE.USER.toString());
+                RequestDispatcher requestDispatcher = req.getRequestDispatcher("/user");
+                requestDispatcher.forward(req, resp);
             }
         }
     }
 
     @Override
     public void destroy() {
-
+        fConfig = null;
     }
 }

@@ -29,12 +29,4 @@ public class ListUsersServlet extends HttpServlet {
         RequestDispatcher requestDispatcher = req.getRequestDispatcher("UsersList.jsp");
         requestDispatcher.forward(req, resp);
     }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //for testing
-        String uri = req.getRequestURI();
-        System.out.println("Requested Resource from POST method of ListUsersServlet::" + uri);
-
-    }
 }
