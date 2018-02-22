@@ -32,16 +32,17 @@ public class UsersFilter implements Filter {
             if(cookie.getName().equals(User.ROLE.ADMIN.toString())){
                 System.out.println("filter role ADMIN");
                 System.out.println(User.ROLE.ADMIN.toString());
-//                RequestDispatcher requestDispatcher = req.getRequestDispatcher("/admin");
-//                requestDispatcher.forward(req, resp);
                 chain.doFilter(req, resp);
+                return;
             } else if ((cookie.getName().equals(User.ROLE.USER.toString())) || (cookie.getName().equals(User.ROLE.ADMIN.toString()))){
                 System.out.println("filter role User");
                 System.out.println(User.ROLE.USER.toString());
                 RequestDispatcher requestDispatcher = req.getRequestDispatcher("/user");
                 requestDispatcher.forward(req, resp);
+                return;
             }
         }
+        resp.sendRedirect("Error.jsp");
     }
 
     @Override

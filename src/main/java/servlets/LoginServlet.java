@@ -37,9 +37,13 @@ public class LoginServlet extends HttpServlet {
             }
 
             cookie = new Cookie(userRole.toString(), login);
-            System.out.println("login: " + userRole.toString());
+            System.out.println("user ROLE: " + userRole.toString());
             resp.addCookie(cookie);
-            resp.sendRedirect("/admin");
+            if ((userRole.toString()).equals(User.ROLE.ADMIN.toString())) {
+                resp.sendRedirect("/admin");
+            } else if ((userRole.toString()).equals(User.ROLE.USER.toString())){
+                resp.sendRedirect("/user");
+            }
         } else {
             resp.sendRedirect("/index.jsp");
         }
