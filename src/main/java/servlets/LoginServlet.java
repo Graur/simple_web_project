@@ -26,16 +26,7 @@ public class LoginServlet extends HttpServlet {
 
         if(userIsExist(login, pass)){
             User.ROLE userRole = getRoleByLoginAndPass(login, pass);
-
-            for (Cookie delCookie : cookies){
-                if (delCookie.getName().equals(User.ROLE.USER.toString()) || delCookie.getName().equals(User.ROLE.ADMIN.toString())) {
-                    delCookie.setValue("");
-                    delCookie.setPath("/");
-                    delCookie.setMaxAge(0);
-                    resp.addCookie(delCookie);
-                }
-            }
-
+            LogoutServlet.deleteCookies(cookies, resp);
             cookie = new Cookie(userRole.toString(), login);
             System.out.println("user ROLE: " + userRole.toString());
             resp.addCookie(cookie);
@@ -72,8 +63,6 @@ public class LoginServlet extends HttpServlet {
 
         } else {
             result = User.ROLE.USER;
-            usersDAO.insertUser(new User(login, password));
-
         }
 
         return result;

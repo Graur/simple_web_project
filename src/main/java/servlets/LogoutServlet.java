@@ -15,7 +15,11 @@ public class LogoutServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Cookie[] cookies = req.getCookies();
+        deleteCookies(cookies, resp);
+        resp.sendRedirect("/logoutprocess.jsp");
+    }
 
+    public static void deleteCookies(Cookie[] cookies, HttpServletResponse resp){
         for (Cookie delCookie : cookies){
             if (delCookie.getName().equals(User.ROLE.USER.toString()) || delCookie.getName().equals(User.ROLE.ADMIN.toString())) {
                 delCookie.setValue("");
@@ -24,6 +28,5 @@ public class LogoutServlet extends HttpServlet {
                 resp.addCookie(delCookie);
             }
         }
-        resp.sendRedirect("/logoutprocess.jsp");
     }
 }
