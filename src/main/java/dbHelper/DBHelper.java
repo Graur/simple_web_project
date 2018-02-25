@@ -71,10 +71,5 @@ public class DBHelper {
         configuration.setProperty("hibernate.hbm2ddl.auto", properties.getProperty("hibernate.hbm2ddl.auto"));
 
         return configuration;
-        //create session factory
-//        StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder();
-//        builder.applySettings(configuration.getProperties());
-//        ServiceRegistry serviceRegistry = builder.build();
-//        return sessionFactory = configuration.buildSessionFactory(serviceRegistry);
     }
 }
